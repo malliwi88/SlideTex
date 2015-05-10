@@ -1,0 +1,6 @@
+// adjustments for the pdf viewer
+
+// hide some options
+#openFile,#secondaryOpenFile,#viewBookmark,#secondaryViewBookmark,#print,#secondaryPrint {
+	display: none !important;
+}

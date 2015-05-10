@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SlideTex - Writing presentations</title>
+
+    <link href="includes/style.css" rel="stylesheet">
+
+</head>
+
+<body role="document">
+
+<div class="container application-container" role="main">
+    <div class="row toolbar">
+        <div class="col-sm-6">
+            <button class="btn btn-primary ui-add-slide" href="#" role="button">
+                <i class="fa fa-plus-circle"></i> Neue Folie ( \frame{..} )
+            </button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addImageModal">
+                <i class="fa fa-image"></i> Grafik einfügen
+            </button>
+            <div class="modal fade" id="addImageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h3 class="modal-title" id="myModalLabel">Grafik einfügen</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <form action="#" enctype="multipart/form-data" method="post">
+                                        <div class="form-group">
+                                            <label for="graphicUpload">Grafik hochladen</label>
+                                            <input type="file" name="graphic" id="graphicUpload" accept="image/*">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="row ui-images-list">
+                                <div class="col-sm-12">
+                                    <h4>Grafik auswählen</h4>
+                                    <div class="ui-images-container"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <button class="btn btn-primary ui-compile-slides" href="#" role="button"><i class="fa fa-refresh"></i> Folien aktualisieren</button>
+            <label class="checkbox-inline">
+                <input type="checkbox" class="ui-compile-slides-auto" value="option1"> automatisch
+            </label>
+        </div>
+    </div>
+
+    <div class="row content-container">
+        <div class="col-sm-6 editor-container">
+            <div id="editor">
+\documentclass{beamer}
+\begin{document}
+\title{Simple Beamer Class}
+\author{Sascha Frank}
+\date{\today}
+
+\frame{\titlepage}
+
+
+\frame{\frametitle{Title}
+Each frame should have a title.
+}
+
+
+\end{document}
+</div>
+        </div>
+        <div class="col-sm-6 view-container frame-container">
+            <iframe class="frame" src="viewer.html?file=output/default.pdf" allowfullscreen webkitallowfullscreen></iframe>
+        </div>
+    </div>
+</div> <!-- /container -->
+
+
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="libs/jquery/dist/jquery.js"></script>
+<script src="libs/bootstrap-sass/assets/javascripts/bootstrap.min.js"></script>
+<script src="libs/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="libs/ace-builds/src-noconflict/ext-language_tools.js"></script>
+<script src="includes/app.js"></script>
+</body>
+</html>

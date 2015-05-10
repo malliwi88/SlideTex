@@ -1,0 +1,4 @@
+/* line 4, ../sass/viewer.scss */
+#openFile, #secondaryOpenFile, #viewBookmark, #secondaryViewBookmark, #print, #secondaryPrint {
+  display: none !important;
+}
