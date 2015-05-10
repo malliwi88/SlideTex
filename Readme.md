@@ -12,7 +12,6 @@ grunt
 ``
 
 # Run:
-Building for running is not needed. Application is fully build in webapp dir.
 ``
 grunt connect
 ``
