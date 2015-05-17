@@ -27,6 +27,10 @@ $(function() {
         $editor.append(example);
     }
 
+    function calculateAmountOfFrames() {
+        return (aceEditor.getSession().getValue().match(/\\frame{/g) || []).length;
+    }
+
 
     function attachEventListeners() {
 
@@ -37,6 +41,20 @@ $(function() {
             code = code.insertAt(code.indexOf('\\end{document}'),frameSkeleton);
 
             aceEditor.getSession().setValue(code);
+
+            // update current Page
+            localStorage.currentPage = calculateAmountOfFrames();
+
+            // compile
+            SlideTex.Viewer.compile();
+
+            /*
+            $editor.animate({
+                scrollTop:$editor[0].scrollHeight - $editor.height()
+            },100,function(){
+                //done
+            });
+            */
         });
     }
 

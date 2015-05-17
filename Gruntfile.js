@@ -34,15 +34,6 @@ module.exports = function(grunt) {
                     interrupt: true
                 }
             }
-        },
-        connect: {
-            server: {
-                options: {
-                    port: 8080,
-                    base: 'webapp',
-                    keepalive: true
-                }
-            }
         }
 
     });
@@ -50,7 +41,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-compass');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-connect');
 
     // Default task(s).
     grunt.registerTask('buildWebapp', ['compass', 'concat']);

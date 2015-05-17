@@ -2,3 +2,5 @@
 /node_modules
 /webapp/libs
 /.idea
+/webapp/output
+!/webapp/output/default.pdf

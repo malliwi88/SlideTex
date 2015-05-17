@@ -11536,7 +11536,7 @@ button.close {
   margin-bottom: 0;
 }
 @media (min-width: 768px) {
-  /* line 88, ../sass/style.scss */
+  /* line 90, ../sass/style.scss */
   .application-container .modal-dialog {
     width: 800px;
   }
