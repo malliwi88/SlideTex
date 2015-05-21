@@ -2,6 +2,8 @@
 $(function() {
     var $editor = $('.ui-editor');
     var $addSlide = $('.ui-add-slide');
+    var $undo = $('.ui-undo');
+    var $redo = $('.ui-redo');
     var frameSkeleton = '\\frame{\\frametitle{Mein Titel }\nMein Inhalt\n}\n\n';
 
     var aceEditor;
@@ -38,23 +40,50 @@ $(function() {
 
             var code = aceEditor.getSession().getValue();
 
-            code = code.insertAt(code.indexOf('\\end{document}'),frameSkeleton);
+            var withoutEnd = code.substr(0, code.indexOf('\\end{document}'));
 
-            aceEditor.getSession().setValue(code);
+            var linesWithoutEnd = withoutEnd.split(/\r*\n/);
+
+            aceEditor.getSession().insert({row:linesWithoutEnd.length - 1, column: 0}, frameSkeleton);
+
+
+            //code = code.insertAt(code.indexOf('\\end{document}'),frameSkeleton);
+
+            //aceEditor.getSession().setValue(code);
 
             // update current Page
             localStorage.currentPage = calculateAmountOfFrames();
 
             // compile
             SlideTex.Viewer.compile();
+        });
 
-            /*
-            $editor.animate({
-                scrollTop:$editor[0].scrollHeight - $editor.height()
-            },100,function(){
-                //done
-            });
-            */
+        $undo.click(function undoEvent() {
+            aceEditor.getSession().getUndoManager().undo();
+        });
+
+        $redo.click(function redoEvent() {
+            aceEditor.getSession().getUndoManager().redo();
+        });
+
+        aceEditor.getSession().on('change', function editorChangeEvent() {
+
+            var undoManager = aceEditor.getSession().getUndoManager();
+
+            setTimeout(function() {
+                if(undoManager.hasUndo()) {
+                    $undo.removeAttr('disabled');
+                }else{
+                    $undo.attr('disabled', 'disabled');
+                }
+                if(undoManager.hasRedo()) {
+                    $redo.removeAttr('disabled');
+                }else{
+                    $redo.attr('disabled', 'disabled');
+                }
+            }, 100);
+
+
         });
     }
 

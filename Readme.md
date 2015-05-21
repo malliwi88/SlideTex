@@ -1,5 +1,5 @@
 # SlideTex
-SlideTex is a full-stack latex editor for the web. Main target are presentations
+SlideTex is a full-stack LaTeX editor for the web. Main target are presentations
 with the LaTeX beamer.
 
 The development of this application was made with a usability engineering process.
@@ -27,9 +27,15 @@ grunt
 
 ## Run:
 ``
-grunt connect
+node app.js
 ``
 Open http://localhost:8080/ in browser.
 
 ## Config:
 You may adjust some settings in the app.js
+
+## Author and License
+SlideTex was made by [Matthias Witte](http://matthias-witte.net/).
+Feel free to do anything with SlideTex which is permitted by the MIT License :)
+If you do something, tell me. I am very interested and will probably help you.
+

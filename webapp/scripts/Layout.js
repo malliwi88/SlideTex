@@ -12,6 +12,7 @@ $(function() {
                 resizeVertical();
             });
             resizeVertical();
+            $('.ui-tooltip').tooltip();
         }
     };
 });

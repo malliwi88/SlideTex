@@ -11488,16 +11488,25 @@ button.close {
   left: 0;
   right: 0;
 }
-/* line 35, ../sass/style.scss */
+/* line 34, ../sass/style.scss */
+.application-container .content-container .editor-container #editor .ace_cursor {
+  color: black;
+  border-left: 3px solid;
+}
+/* line 39, ../sass/style.scss */
+.application-container .content-container .editor-container #editor .ace_marker-layer .ace_bracket {
+  border: 1px solid black;
+}
+/* line 44, ../sass/style.scss */
 .application-container .content-container .view-container {
   height: 100%;
 }
-/* line 37, ../sass/style.scss */
+/* line 46, ../sass/style.scss */
 .application-container .content-container .view-container .frame {
   width: 100%;
   height: 100%;
 }
-/* line 43, ../sass/style.scss */
+/* line 52, ../sass/style.scss */
 .application-container .content-container .view-container.activity:before {
   position: absolute;
   content: ' ';
@@ -11506,29 +11515,29 @@ button.close {
   right: 15px;
   height: 100%;
 }
-/* line 56, ../sass/style.scss */
+/* line 65, ../sass/style.scss */
 .application-container .ui-images-list {
   display: none;
 }
-/* line 61, ../sass/style.scss */
+/* line 70, ../sass/style.scss */
 .application-container .ui-images-list .ui-images-container .thumbnail {
   cursor: pointer;
   position: relative;
   height: 230px;
 }
-/* line 66, ../sass/style.scss */
+/* line 75, ../sass/style.scss */
 .application-container .ui-images-list .ui-images-container .thumbnail img {
   max-height: 200px;
   padding: 10px;
 }
-/* line 71, ../sass/style.scss */
+/* line 80, ../sass/style.scss */
 .application-container .ui-images-list .ui-images-container .thumbnail .caption {
   width: 100%;
   bottom: 5px;
   position: absolute;
   padding-bottom: 0;
 }
-/* line 76, ../sass/style.scss */
+/* line 85, ../sass/style.scss */
 .application-container .ui-images-list .ui-images-container .thumbnail .caption p {
   position: relative;
   overflow: hidden;
@@ -11536,7 +11545,7 @@ button.close {
   margin-bottom: 0;
 }
 @media (min-width: 768px) {
-  /* line 90, ../sass/style.scss */
+  /* line 99, ../sass/style.scss */
   .application-container .modal-dialog {
     width: 800px;
   }

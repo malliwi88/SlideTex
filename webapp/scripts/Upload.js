@@ -7,6 +7,15 @@ $(function() {
 	var $uploadInput = $('input[type=file]#graphicUpload');
 	var $imagesList = $('.ui-images-list');
 	var $imagesContainer = $('.ui-images-container');
+	var $imagesModal = $('#addImageModal');
+
+
+	function getImageFigureCode(fileName) {
+		return '\\begin{figure}\n' +
+			' \\includegraphics[width=\\textwidth,height=\\textheight,keepaspectratio]{'+ fileName +'}\n' +
+			' \\caption{Die Abbildung zeigt ein Beispielbild}\n' +
+			'\\end{figure}\n' ;
+	}
 
 	function showImage(fileName) {
 
@@ -17,14 +26,10 @@ $(function() {
 		$imagesList.slideDown();
 
 		imageThumbDom.click(function() {
-
-			var imageFigureSkeleton = '\\begin{figure}\n' +
-				' \\includegraphics[width=\\textwidth,height=\\textheight,keepaspectratio]{'+ fileName +'}\n' +
-				' \\caption{Die Abbildung zeigt ein Beispielbild}\n' +
-				'\\end{figure}\n' ;
-
-			SlideTex.Writer.editor.insert(imageFigureSkeleton);
+			SlideTex.Writer.editor.insert(getImageFigureCode(fileName));
 		});
+		SlideTex.Writer.editor.insert(getImageFigureCode(fileName));
+		$imagesModal.modal('hide');
 	}
 
 

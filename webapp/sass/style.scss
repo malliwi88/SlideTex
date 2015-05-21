@@ -30,6 +30,15 @@ $fa-font-path:        "../libs/fontawesome/fonts";
 				bottom: 0;
 				left: 0;
 				right: 0;
+
+				.ace_cursor {
+					color: black;
+					border-left: 3px solid;
+				}
+
+				.ace_marker-layer .ace_bracket {
+					border: 1px solid black;
+				}
 			}
 		}
 		.view-container {
