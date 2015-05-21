@@ -21,7 +21,9 @@ Coming soon
 ## Build:
 ``
 npm install
+
 bower install
+
 grunt
 ``
 
@@ -29,6 +31,7 @@ grunt
 ``
 node app.js
 ``
+
 Open http://localhost:8080/ in browser.
 
 ## Config:
@@ -36,6 +39,8 @@ You may adjust some settings in the app.js
 
 ## Author and License
 SlideTex was made by [Matthias Witte](http://matthias-witte.net/).
+
 Feel free to do anything with SlideTex which is permitted by the MIT License :)
+
 If you do something, tell me. I am very interested and will probably help you.
 

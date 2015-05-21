@@ -91,7 +91,10 @@ $(function() {
 $(function() {
 
     var $compileSlides = $('.ui-compile-slides');
+    var $viewContainer = $('.view-container');
     var $frameContainer = $('.frame-container');
+    var $errorContainer = $('.error-container');
+    var $errorLog = $('.error-content');
     var $compileSlidesAuto = $('.ui-compile-slides-auto');
 
 
@@ -104,15 +107,41 @@ $(function() {
         );
     }
 
+    function escapeHtml(text) {
+        var map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;',
+            "\n": '<br>'
+        };
+
+        return text.replace(/[&<>"'\n]/g, function(m) { return map[m]; }).split(" ").join("&nbsp;");
+    }
+
     function processData(data) {
+
+        // if latex compiling failed
+        if(data.error) {
+            $viewContainer.addClass('error-present');
+            // add error log and scroll down to last line
+            $errorLog.html(escapeHtml(data.console));
+            $errorContainer.animate({ scrollTop: $errorContainer[0].scrollHeight}, 350);
+            return false;
+        }
+
+        $viewContainer.removeClass('error-present');
         if(data.name) {
             var viewerUrl = 'viewer.html?file=' + data.name;
 
             if(localStorage.currentPage) {
                 viewerUrl += '#page=' + localStorage.currentPage;
             }
+            $frameContainer.find('.frame').remove();
 
-            $frameContainer.html('<iframe class="frame" src="'+viewerUrl+'" allowfullscreen webkitallowfullscreen></iframe>');
+            $frameContainer.prepend('<iframe class="frame" src="'+viewerUrl+'" allowfullscreen webkitallowfullscreen></iframe>');
+            return true;
         }
     }
 
