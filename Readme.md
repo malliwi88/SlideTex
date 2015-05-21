@@ -19,18 +19,16 @@ Coming soon
 - [compass](http://compass-style.org/)
 
 ## Build:
-``
+```
 npm install
-
 bower install
-
 grunt
-``
+```
 
 ## Run:
-``
+```
 node app.js
-``
+```
 
 Open http://localhost:8080/ in browser.
 
