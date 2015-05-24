@@ -103,6 +103,9 @@ $(function() {
 
     SlideTex.Writer = {
         init: function() {
+
+            SlideTex.Writer.gotInitialized = true;
+
             initeditor();
             attachEventListeners();
             //insertDefaultTemplate();
@@ -110,6 +113,7 @@ $(function() {
 
         },
         editor: null,
-        editorDomSelector: '#editor'
+        editorDomSelector: '#editor',
+        gotInitialized: false
     };
 });

@@ -1,4 +1,55 @@
+String.prototype.insertAt=function(index, string) {
+    return this.substr(0, index) + string + this.substr(index);
+};;// Global singleton of the SlideTex application
+var SlideTex = {
+
+    idGenerator: function (length){
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for( var i=0; i < length; i++ )
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    },
+    id: null
+};
+
 $(function() {
+    // check if a hash is given
+    var cleanHash = window.location.hash.replace("#", "");
+    if (cleanHash.length < 7) {
+        var id = SlideTex.idGenerator(7);
+        window.location.hash = "#" + id;
+        SlideTex.id = id;
+    }else{
+        SlideTex.id = cleanHash;
+    }
+
+    // retrieve current state
+    $.ajax({
+        url: '/state',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            name: SlideTex.id
+        })
+    }).done(function(data, textStatus, jqXHR) {
+
+            // inject latex code
+            $('#editor').html(data.latex);
+
+            // initializes the components
+            $( document ).ready(function() {
+                SlideTex.Writer.init();
+                SlideTex.Layout.init();
+                SlideTex.Viewer.init(data.pdf);
+                SlideTex.Upload.init(data.images);
+            });
+        });
+
+});
+;$(function() {
 
     var $contentContainer = $('.content-container');
 
@@ -18,74 +69,83 @@ $(function() {
 });;
 $(function() {
 
-	// Variable to store your files
-	var files;
+    // Variable to store your files
+    var files;
 
-	var $uploadInput = $('input[type=file]#graphicUpload');
-	var $imagesList = $('.ui-images-list');
-	var $imagesContainer = $('.ui-images-container');
-	var $imagesModal = $('#addImageModal');
-
-
-	function getImageFigureCode(fileName) {
-		return '\\begin{figure}\n' +
-			' \\includegraphics[width=\\textwidth,height=\\textheight,keepaspectratio]{'+ fileName +'}\n' +
-			' \\caption{Die Abbildung zeigt ein Beispielbild}\n' +
-			'\\end{figure}\n' ;
-	}
-
-	function showImage(fileName) {
-
-		var imageThumbDom = $('<div class="col-sm-6 col-md-4"> <div class="thumbnail"><img src="output/'+fileName+'" data-dismiss="modal"><div class="caption">' +
-			'<p>'+fileName+'</p></div></div></div>');
-
-		$imagesContainer.append(imageThumbDom);
-		$imagesList.slideDown();
-
-		imageThumbDom.click(function() {
-			SlideTex.Writer.editor.insert(getImageFigureCode(fileName));
-		});
-		SlideTex.Writer.editor.insert(getImageFigureCode(fileName));
-		$imagesModal.modal('hide');
-	}
+    var $uploadInput = $('input[type=file]#graphicUpload');
+    var $imagesList = $('.ui-images-list');
+    var $imagesContainer = $('.ui-images-container');
+    var $imagesModal = $('#addImageModal');
 
 
-	// Grab the files and set them to our variable
-	function prepareUpload(event) {
-		files = event.target.files;
-		var data = new FormData();
-		$.each(files, function(key, value)
-		{
-			data.append(key, value);
-		});
+    function getImageFigureCode(fileName) {
+        return '\\begin{figure}\n' +
+            ' \\includegraphics[width=\\textwidth,height=\\textheight,keepaspectratio]{'+ fileName +'}\n' +
+            ' \\caption{Die Abbildung zeigt ein Beispielbild}\n' +
+            '\\end{figure}\n' ;
+    }
 
-		$.ajax({
-			url: 'upload',
-			type: 'POST',
-			data: data,
-			cache: false,
-			dataType: 'json',
-			processData: false,
-			contentType: false,
-			success: function(data, textStatus, jqXHR) {
-				console.log(data);
-				$uploadInput.replaceWith( $uploadInput = $uploadInput.clone( true ) );
-				$uploadInput.show();
-				for(var i=0; i< data.length; i++) {
-					showImage(data[i].name);
-				}
-			},
-			beforeSend: function( xhr ) {
-				$uploadInput.hide();
-			}
-		});
-	}
+    function addImage(fileName, webPathName) {
+        var imageThumbDom = $('<div class="col-sm-6 col-md-4"> <div class="thumbnail"><img src="'+webPathName+'" data-dismiss="modal"><div class="caption">' +
+            '<p>'+fileName+'</p></div></div></div>');
 
-	SlideTex.Upload = {
-		init: function() {
-			$uploadInput.on('change', prepareUpload);
-		}
-	};
+        $imagesContainer.append(imageThumbDom);
+        $imagesList.slideDown();
+        imageThumbDom.click(function() {
+            SlideTex.Writer.editor.insert(getImageFigureCode(fileName));
+        });
+    }
+
+    function showImage(fileName, webPathName) {
+        addImage(fileName, webPathName);
+        SlideTex.Writer.editor.insert(getImageFigureCode(fileName));
+        $imagesModal.modal('hide');
+    }
+
+
+    // Grab the files and set them to our variable
+    function prepareUpload(event) {
+        files = event.target.files;
+        var data = new FormData();
+        $.each(files, function(key, value)
+        {
+            data.append(key, value);
+        });
+
+        $.ajax({
+            url: 'upload/' + SlideTex.id,
+            type: 'POST',
+            data: data,
+            cache: false,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success: function(data, textStatus, jqXHR) {
+                console.log(data);
+                $uploadInput.replaceWith( $uploadInput = $uploadInput.clone( true ) );
+                $uploadInput.show();
+                for(var i=0; i< data.length; i++) {
+                    showImage(data[i].name, data[i].webPathName);
+                }
+            },
+            beforeSend: function( xhr ) {
+                $uploadInput.hide();
+            }
+        });
+    }
+
+    SlideTex.Upload = {
+        init: function(images) {
+            $uploadInput.on('change', prepareUpload);
+
+            if(images) {
+                for(var i=0; i<images.length; i++) {
+                    var image = images[i];
+                    addImage(image.name, image.webPathName);
+                }
+            }
+        }
+    };
 });;
 
 $(function() {
@@ -102,7 +162,7 @@ $(function() {
         return JSON.stringify(
             {
                 latex: SlideTex.Writer.editor.getValue(),
-                name: 'testabc'
+                name: SlideTex.id
             }
         );
     }
@@ -120,6 +180,18 @@ $(function() {
         return text.replace(/[&<>"'\n]/g, function(m) { return map[m]; }).split(" ").join("&nbsp;");
     }
 
+    function buildFrame(name) {
+        var viewerUrl = 'viewer.html?file=' + name;
+
+        if(localStorage.currentPage) {
+            viewerUrl += '#page=' + localStorage.currentPage;
+        }
+        $frameContainer.find('.frame').remove();
+
+        $frameContainer.prepend('<iframe class="frame" src="'+viewerUrl+'" allowfullscreen webkitallowfullscreen></iframe>');
+        return true;
+    }
+
     function processData(data) {
 
         // if latex compiling failed
@@ -133,15 +205,7 @@ $(function() {
 
         $viewContainer.removeClass('error-present');
         if(data.name) {
-            var viewerUrl = 'viewer.html?file=' + data.name;
-
-            if(localStorage.currentPage) {
-                viewerUrl += '#page=' + localStorage.currentPage;
-            }
-            $frameContainer.find('.frame').remove();
-
-            $frameContainer.prepend('<iframe class="frame" src="'+viewerUrl+'" allowfullscreen webkitallowfullscreen></iframe>');
-            return true;
+            return buildFrame(data.name);
         }
     }
 
@@ -150,9 +214,8 @@ $(function() {
         $frameContainer.addClass('activity');
         $compileSlides.find('.fa').addClass('fa-spin');
 
-
         $.ajax({
-            url: 'http://localhost:8080/api',
+            url: '/compile',
             method: 'POST',
             contentType: 'application/json',
             data: buildData()
@@ -218,9 +281,12 @@ $(function() {
 
 
     SlideTex.Viewer = {
-        init: function() {
+        init: function(fileName) {
             attachEventListeners();
             appendCompileButtonLabel();
+            if(fileName) {
+                buildFrame(fileName);
+            }
         },
         compile: compile
     };
@@ -329,6 +395,9 @@ $(function() {
 
     SlideTex.Writer = {
         init: function() {
+
+            SlideTex.Writer.gotInitialized = true;
+
             initeditor();
             attachEventListeners();
             //insertDefaultTemplate();
@@ -336,19 +405,7 @@ $(function() {
 
         },
         editor: null,
-        editorDomSelector: '#editor'
+        editorDomSelector: '#editor',
+        gotInitialized: false
     };
-});;var SlideTex = {};
-
-String.prototype.insertAt=function(index, string) {
-    return this.substr(0, index) + string + this.substr(index);
-};;$(function() {
-
-    $( document ).ready(function() {
-        SlideTex.Writer.init();
-        SlideTex.Layout.init();
-        SlideTex.Viewer.init();
-		SlideTex.Upload.init();
-    });
 });
-

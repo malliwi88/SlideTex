@@ -15,7 +15,11 @@ module.exports = function(grunt) {
                 options: {
                     separator: ';'
                 },
-                src: ['webapp/scripts/**/*.js'],
+                src: [
+                    'webapp/scripts/_prototypes.js',
+                    'webapp/scripts/Bootstrap.js',
+                    'webapp/scripts/**/*.js'
+                ],
                 dest: 'webapp/includes/app.js'
             }
         },

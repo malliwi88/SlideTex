@@ -14,7 +14,7 @@ $(function() {
         return JSON.stringify(
             {
                 latex: SlideTex.Writer.editor.getValue(),
-                name: 'testabc'
+                name: SlideTex.id
             }
         );
     }
@@ -32,6 +32,18 @@ $(function() {
         return text.replace(/[&<>"'\n]/g, function(m) { return map[m]; }).split(" ").join("&nbsp;");
     }
 
+    function buildFrame(name) {
+        var viewerUrl = 'viewer.html?file=' + name;
+
+        if(localStorage.currentPage) {
+            viewerUrl += '#page=' + localStorage.currentPage;
+        }
+        $frameContainer.find('.frame').remove();
+
+        $frameContainer.prepend('<iframe class="frame" src="'+viewerUrl+'" allowfullscreen webkitallowfullscreen></iframe>');
+        return true;
+    }
+
     function processData(data) {
 
         // if latex compiling failed
@@ -45,15 +57,7 @@ $(function() {
 
         $viewContainer.removeClass('error-present');
         if(data.name) {
-            var viewerUrl = 'viewer.html?file=' + data.name;
-
-            if(localStorage.currentPage) {
-                viewerUrl += '#page=' + localStorage.currentPage;
-            }
-            $frameContainer.find('.frame').remove();
-
-            $frameContainer.prepend('<iframe class="frame" src="'+viewerUrl+'" allowfullscreen webkitallowfullscreen></iframe>');
-            return true;
+            return buildFrame(data.name);
         }
     }
 
@@ -62,9 +66,8 @@ $(function() {
         $frameContainer.addClass('activity');
         $compileSlides.find('.fa').addClass('fa-spin');
 
-
         $.ajax({
-            url: 'http://localhost:8080/api',
+            url: '/compile',
             method: 'POST',
             contentType: 'application/json',
             data: buildData()
@@ -130,9 +133,12 @@ $(function() {
 
 
     SlideTex.Viewer = {
-        init: function() {
+        init: function(fileName) {
             attachEventListeners();
             appendCompileButtonLabel();
+            if(fileName) {
+                buildFrame(fileName);
+            }
         },
         compile: compile
     };
