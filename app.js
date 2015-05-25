@@ -1,14 +1,4 @@
-var config = {
-    caching: false,
-    pdflatexBinary: '/Library/TeX/Distributions/Programs/texbin/pdflatex',
-    latexDir: 'latex',
-    outputDir: 'webapp/output',
-    webappOutputPath: 'output',
-    serverPort: 8080,
-    fileName: 'presentation',
-    defaultDocument: 'webapp/output/default',
-    webappDefaultDocument: 'output/default'
-};
+var config = require('./config');
 
 var connect = require('connect');
 var bodyParser = require('body-parser');
@@ -18,27 +8,11 @@ var app = express();
 var multer  = require('multer');
 var exec = require('child_process').exec;
 var mkdirp = require('mkdirp');
-var sanitize = require("sanitize-filename");
+var sanitizer = require("./sanitizer.js");
 var mime = require('mime');
 
-// sanitize fileName for latex
-function sanitizeForLatex(name, withoutExtension) {
-    var newName = sanitize(name).split(" ").join("-");
-    var nameElements = newName.split(".");
-    if(withoutExtension) {
-        newName = nameElements.join("");
-    }else{
-        var extension = nameElements.pop();
-        newName = nameElements.join("") + '.' + extension;
-    }
-
-    return newName
-}
-
-// sanitize fileName for latex
-function sanitizeForSecurity(name) {
-    return sanitize(name).split(" ").join("-").replace(/\./g,"");
-}
+var currentState = require('./currentState.js');
+var compile = require('./compile.js');
 
 /**
  * Upload handling of files
@@ -52,7 +26,7 @@ app.use(multer({ dest: config.outputDir+'/',
      * @returns {String}
      */
     rename: function (fieldname, filename) {
-        return sanitizeForLatex(filename, true);
+        return sanitizer.latexFile(filename, true);
     },
     /**
      * Dynamic change of destination depending on given request url
@@ -62,7 +36,7 @@ app.use(multer({ dest: config.outputDir+'/',
      * @returns {string}
      */
     changeDest: function(dest, req, res) {
-        dest = dest + "/" + sanitizeForSecurity(req.url.replace("/upload/", ""));
+        dest = dest + "/" + sanitizer.security(req.url.replace("/upload/", ""));
         mkdirp.sync(dest);
         return dest;
     },
@@ -82,8 +56,8 @@ app.post('/upload*',function(req,res){
             var file = req.files[property];
             response.push(
                 {
-                    name: sanitizeForLatex(file.name),
-                    webPathName: config.webappOutputPath + "/" + sanitizeForSecurity(req.url.replace("/upload/", "")) + "/" + sanitizeForLatex(file.name),
+                    name: sanitizer.latexFile(file.name),
+                    webPathName: config.webappOutputPath + "/" + sanitizer.security(req.url.replace("/upload/", "")) + "/" + sanitizer.latexFile(file.name),
                     mimetype: file.mimetype
                 }
             );
@@ -108,124 +82,11 @@ app.use(bodyParser.json());
  * Handle compile requests
  */
 app.post('/compile', function (req, res) {
-
-    if(req.body.latex && req.body.name) {
-
-
-        var filename = config.fileName;
-        var filenameLatex = filename + ".tex";
-        var documentFolder = config.outputDir + "/" + req.body.name + "/";
-        var filenameOutputWeb = config.webappOutputPath + "/" + req.body.name + "/" + filename + ".pdf";
-
-        // create document folder if not existing async
-        mkdirp(documentFolder, function(err) {
-
-            // write latex file async
-            fs.writeFile(documentFolder + filenameLatex, req.body.latex, function(err) {
-                if(err) {
-                    return console.log(err);
-                }
-
-                var command = config.pdflatexBinary + " -interaction=nonstopmode " + filenameLatex + "";
-
-                // exec latex command async
-                exec(command, {
-                    cwd: documentFolder
-                },function(error, stdout, stderr) {
-
-                    // respond
-                    res.setHeader('Content-Type', 'application/json');
-                    res.send(JSON.stringify(
-                        {
-                            name: filenameOutputWeb,
-                            error: Boolean(error),
-                            console: stdout
-                        }
-                    ));
-                });
-            });
-
-        });
-
-    }
+    compile.handle(req, res, config);
 });
 
 app.post('/state', function (req, res) {
-    if(req.body.name) {
-
-        var dirName = sanitizeForSecurity(req.body.name);
-
-        fs.exists(config.outputDir + '/' + dirName, function (exists) {
-
-            var documentFileName;
-            var webDocumentFileName;
-            if(exists){
-                var documentFolder = config.outputDir + '/' + dirName;
-                documentFileName = documentFolder + "/" + config.fileName;
-                webDocumentFileName = config.webappOutputPath + '/' + dirName + "/" + config.fileName;
-            }else{
-                documentFileName = config.defaultDocument;
-                webDocumentFileName = config.webappDefaultDocument;
-            }
-
-            // read the latex file
-            fs.readFile(documentFileName + '.tex', 'utf8', function (err,data) {
-
-                var outputFilePath = documentFolder + "/" + config.fileName + '.pdf';
-
-                // is something is wrong get default content sync
-                if (err) {
-                    documentFileName = config.defaultDocument;
-                    data = fs.readFileSync(documentFileName + '.tex', 'utf8');
-                    webDocumentFileName = config.webappDefaultDocument;
-                }
-
-                var images = [];
-                if(exists){
-                    // get the images
-                    fs.readdir(documentFolder, function(err, files) {
-
-                        for(var i=0; i < files.length; i++) {
-                            // get mimeType
-                            var mimeType = mime.lookup(documentFolder + '/' + files[i]);
-                            // check if it's an image
-                            if(mimeType && mimeType.split("/").shift() === 'image') {
-                                var imageFileName = sanitizeForLatex(files[i]);
-                                images.push({
-                                    name: imageFileName,
-                                    webPathName: config.webappOutputPath + "/" + dirName + "/" + imageFileName,
-                                    mimetype: mimeType
-                                });
-                            }
-                        }
-
-                        res.setHeader('Content-Type', 'application/json');
-                        res.send(JSON.stringify(
-                            {
-                                name: dirName,
-                                error: false,
-                                latex: data,
-                                pdf: webDocumentFileName + '.pdf',
-                                images: images
-                            }
-                        ));
-                    });
-                }else{
-                    res.setHeader('Content-Type', 'application/json');
-                    res.send(JSON.stringify(
-                        {
-                            name: dirName,
-                            error: false,
-                            latex: data,
-                            pdf: webDocumentFileName + '.pdf',
-                            images: images
-                        }
-                    ));
-                }
-
-            });
-        });
-    }
+    currentState.handle(req, res, config);
 });
 
 // run the server

@@ -53,7 +53,6 @@ $(function() {
             processData: false,
             contentType: false,
             success: function(data, textStatus, jqXHR) {
-                console.log(data);
                 $uploadInput.replaceWith( $uploadInput = $uploadInput.clone( true ) );
                 $uploadInput.show();
                 for(var i=0; i< data.length; i++) {

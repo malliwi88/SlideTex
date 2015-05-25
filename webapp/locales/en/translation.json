@@ -1,0 +1,39 @@
+{
+    "toolbar": {
+        "graphic": {
+            "label": "Insert graphic",
+            "tooltip": "at the cursor"
+        },
+        "undo": {
+            "tooltip": "Undo",
+            "label": ""
+        },
+        "redo": {
+            "tooltip": "Redo",
+            "label": ""
+        },
+        "itemize": {
+            "tooltip": "Add unsorted list",
+            "label": ""
+        },
+        "enumerate": {
+            "tooltip": "Add sorted list",
+            "label": ""
+        },
+        "newSlide": "New slide ( \\frame{..} )",
+        "compileSlides": "Compile slides",
+        "compileSlidesAuto": "automatic"
+    },
+    "notification": {
+        "bookmark": "<strong>Save</strong> this URL. This Presentation will be available under this address."
+    },
+    "modal": {
+        "graphic": {
+            "headline": "Insert graphic",
+            "upload": "Upload graphic",
+            "choose": "Choose graphic",
+            "abort": "Abort"
+        }
+    },
+    "errorlog": "Error log:"
+}

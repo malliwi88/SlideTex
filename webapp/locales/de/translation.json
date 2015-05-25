@@ -1,0 +1,39 @@
+{
+    "toolbar": {
+        "graphic": {
+            "label": "Grafik einfügen",
+            "tooltip": "beim Cursor"
+        },
+        "undo": {
+            "tooltip": "Rückgängig",
+            "label": ""
+        },
+        "redo": {
+            "tooltip": "Wiederholen",
+            "label": ""
+        },
+        "itemize": {
+            "tooltip": "Unsortierte Liste einfügen",
+            "label": ""
+        },
+        "enumerate": {
+            "tooltip": "Nummerierte Liste einfügen",
+            "label": ""
+        },
+        "newSlide": "Neue Folie ( \\frame{..} )",
+        "compileSlides": "Folien aktualisieren",
+        "compileSlidesAuto": "automatisch"
+    },
+    "notification": {
+        "bookmark": "<strong>Speichere</strong> die URL. Diese Präsentation ist immer unter dieser Adresse erreichbar."
+    },
+    "modal": {
+        "graphic": {
+            "headline": "Grafik einfügen",
+            "upload": "Grafik hochladen",
+            "choose": "Grafik auswählen",
+            "abort": "Abbrechen"
+        }
+    },
+    "errorlog": "Fehlerausgabe:"
+}

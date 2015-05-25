@@ -19,23 +19,39 @@
 <body role="document">
 
 <div class="container application-container" role="main">
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+            <div class="alert alert-success alert-dismissible ui-bookmark" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <span data-i18n="[html]notification.bookmark"></span> <br>
+                <a href="#" class="alert-link ui-bookmark-link"></a>
+            </div>
+        </div>
+    </div>
+
     <div class="row toolbar">
         <div class="col-sm-6">
             <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group" role="group">
                     <button class="btn btn-primary ui-add-slide" href="#" role="button">
-                        <i class="fa fa-plus-circle"></i> Neue Folie ( \frame{..} )
+                        <i class="fa fa-plus-circle"></i> <span data-i18n="toolbar.newSlide">New Slide ( \frame{..} )</span>
                     </button>
                 </div>
                 <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-primary ui-tooltip" data-toggle="modal" data-target="#addImageModal" data-placement="bottom" title="beim Cursor">
-                        <i class="fa fa-image"></i> Grafik einfügen
+                    <button type="button" class="btn btn-primary ui-tooltip" data-toggle="modal" data-target="#addImageModal" data-placement="bottom" data-i18n="[title]toolbar.graphic.tooltip" title="at the cursor">
+                        <i class="fa fa-image"></i> <span data-i18n="toolbar.graphic.label">Insert graphic</span>
                     </button>
-                    <button type="button" class="btn btn-primary ui-undo" disabled>
-                        <i class="fa fa-undo"></i> Rückgängig
+                    <button type="button" class="btn btn-primary ui-itemize ui-tooltip" data-placement="bottom" data-i18n="[title]toolbar.itemize.tooltip" title="itemize">
+                        <i class="fa fa-list-ul"></i> <span data-i18n="toolbar.itemize.label"></span>
                     </button>
-                    <button type="button" class="btn btn-primary ui-redo" disabled>
-                        <i class="fa fa-repeat"></i> Wiederholen
+                    <button type="button" class="btn btn-primary ui-enumerate ui-tooltip" data-placement="bottom" data-i18n="[title]toolbar.enumerate.tooltip" title="enumerate">
+                        <i class="fa fa-list-ol"></i> <span data-i18n="toolbar.enumerate.label"></span>
+                    </button>
+                    <button type="button" class="btn btn-primary ui-undo ui-tooltip" data-placement="bottom" data-i18n="[title]toolbar.undo.tooltip" title="undo" disabled>
+                        <i class="fa fa-undo"></i> <span data-i18n="toolbar.undo.label"></span>
+                    </button>
+                    <button type="button" class="btn btn-primary ui-redo ui-tooltip" data-placement="bottom" data-i18n="[title]toolbar.redo.tooltip" title="redo" disabled>
+                        <i class="fa fa-repeat"></i> <span data-i18n="toolbar.redo.label"></span>
                     </button>
                 </div>
             </div>
@@ -46,14 +62,14 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h3 class="modal-title" id="myModalLabel">Grafik einfügen</h3>
+                            <h3 class="modal-title" data-i18n="modal.graphic.headline" id="myModalLabel">Insert graphic</h3>
                         </div>
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-sm-12">
                                     <form action="#" enctype="multipart/form-data" method="post">
                                         <div class="form-group">
-                                            <label for="graphicUpload">Grafik hochladen</label>
+                                            <label for="graphicUpload" data-i18n="modal.graphic.upload">Upload graphic</label>
                                             <input type="file" name="graphic" id="graphicUpload" accept="image/*">
                                         </div>
                                     </form>
@@ -61,22 +77,22 @@
                             </div>
                             <div class="row ui-images-list">
                                 <div class="col-sm-12">
-                                    <h4>Grafik auswählen</h4>
+                                    <h4 data-i18n="modal.graphic.choose">Choose graphic</h4>
                                     <div class="ui-images-container"></div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" data-i18n="modal.graphic.abort">Abort</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-sm-6">
-            <button class="btn btn-primary ui-compile-slides" href="#" role="button"><i class="fa fa-refresh"></i> Folien aktualisieren</button>
+            <button class="btn btn-primary ui-compile-slides" href="#" role="button"><i class="fa fa-refresh"></i> <span data-i18n="toolbar.compileSlides">Compile slides</span></button>
             <label class="checkbox-inline">
-                <input type="checkbox" class="ui-compile-slides-auto" value="option1"> automatisch
+                <input type="checkbox" class="ui-compile-slides-auto" value="option1"> <span data-i18n="toolbar.compileSlidesAuto">automatic</span>
             </label>
         </div>
     </div>
@@ -88,7 +104,7 @@
         <div class="col-sm-6 view-container frame-container">
 
             <div class="error-container">
-                <label class="label">Error log:</label>
+                <label class="label" data-i18n="errorlog">Error log:</label>
                 <div class="error-content"></div>
             </div>
         </div>
@@ -103,6 +119,7 @@
 <script src="libs/bootstrap-sass/assets/javascripts/bootstrap.min.js"></script>
 <script src="libs/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="libs/ace-builds/src-noconflict/ext-language_tools.js"></script>
+<script src="libs/i18next/i18next.js"></script>
 <script src="includes/app.js"></script>
 </body>
 </html>

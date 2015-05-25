@@ -4,6 +4,8 @@ $(function() {
     var $addSlide = $('.ui-add-slide');
     var $undo = $('.ui-undo');
     var $redo = $('.ui-redo');
+    var $itemize = $('.ui-itemize');
+    var $enumerate = $('.ui-enumerate');
     var frameSkeleton = '\\frame{\\frametitle{Mein Titel }\nMein Inhalt\n}\n\n';
 
     var aceEditor;
@@ -56,6 +58,20 @@ $(function() {
 
             // compile
             SlideTex.Viewer.compile();
+        });
+
+        $itemize.click(function itemize() {
+            var itemize = "\\begin{itemize}\n " +
+                          "    \\item \n"+
+                          "\\end{itemize}";
+            aceEditor.insert(itemize);
+        });
+
+        $enumerate.click(function enumerate() {
+            var enumerate = "\\begin{enumerate}\n " +
+                "    \\item \n"+
+                "\\end{enumerate}";
+            aceEditor.insert(enumerate);
         });
 
         $undo.click(function undoEvent() {

@@ -33,7 +33,7 @@ node app.js
 Open http://localhost:8080/ in browser.
 
 ## Config:
-You may adjust some settings in the app.js
+You may adjust some settings in the config.js
 
 ## Author and License
 SlideTex was made by [Matthias Witte](http://matthias-witte.net/).

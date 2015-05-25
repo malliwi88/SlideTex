@@ -52,9 +52,25 @@ $(function() {
 ;$(function() {
 
     var $contentContainer = $('.content-container');
+    var $bookmarkBox = $('.ui-bookmark');
 
     function resizeVertical() {
         $contentContainer.height($(window).height() - $contentContainer.offset().top - 4);
+    }
+
+    function bookmarkBox() {
+        $('.ui-bookmark-link').attr('href', window.location.href).html(window.location.href);
+
+        $('.ui-bookmark .close').click(function() {
+            localStorage.bookmark = true
+            setTimeout(function() {
+                resizeVertical();
+            }, 100);
+        });
+
+        if(localStorage.bookmark) {
+            $bookmarkBox.hide();
+        }
     }
 
     SlideTex.Layout = {
@@ -62,8 +78,22 @@ $(function() {
             $(window).resize(function resizeWindowEventHandler() {
                 resizeVertical();
             });
+
+
+
+            bookmarkBox();
+
             resizeVertical();
-            $('.ui-tooltip').tooltip();
+
+            i18n.init({
+                lngWhitelist: ['de'],
+                fallbackLng: 'en'
+            }, function(t) {
+                // translate nav
+                $("body").i18n();
+                $('.ui-tooltip').tooltip();
+            });
+
         }
     };
 });;
@@ -121,7 +151,6 @@ $(function() {
             processData: false,
             contentType: false,
             success: function(data, textStatus, jqXHR) {
-                console.log(data);
                 $uploadInput.replaceWith( $uploadInput = $uploadInput.clone( true ) );
                 $uploadInput.show();
                 for(var i=0; i< data.length; i++) {
@@ -296,6 +325,8 @@ $(function() {
     var $addSlide = $('.ui-add-slide');
     var $undo = $('.ui-undo');
     var $redo = $('.ui-redo');
+    var $itemize = $('.ui-itemize');
+    var $enumerate = $('.ui-enumerate');
     var frameSkeleton = '\\frame{\\frametitle{Mein Titel }\nMein Inhalt\n}\n\n';
 
     var aceEditor;
@@ -348,6 +379,20 @@ $(function() {
 
             // compile
             SlideTex.Viewer.compile();
+        });
+
+        $itemize.click(function itemize() {
+            var itemize = "\\begin{itemize}\n " +
+                          "    \\item \n"+
+                          "\\end{itemize}";
+            aceEditor.insert(itemize);
+        });
+
+        $enumerate.click(function enumerate() {
+            var enumerate = "\\begin{enumerate}\n " +
+                "    \\item \n"+
+                "\\end{enumerate}";
+            aceEditor.insert(enumerate);
         });
 
         $undo.click(function undoEvent() {
