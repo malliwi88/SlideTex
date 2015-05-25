@@ -22,4 +22,13 @@ var config = {
     webappDefaultDocument: 'output/default'
 };
 
+// Settings which can be overwritten by environmental variables
+if(process.env.PORT) {
+    config.serverPort = process.env.PORT;
+}
+
+if(process.env.BINARY) {
+    config.pdflatexBinary = process.env.BINARY;
+}
+
 module.exports = config;

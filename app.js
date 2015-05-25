@@ -91,3 +91,4 @@ app.post('/state', function (req, res) {
 
 // run the server
 var server = app.listen(config.serverPort);
+console.log("Server is listing on port " + config.serverPort);

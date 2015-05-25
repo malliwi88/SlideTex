@@ -30,7 +30,11 @@ grunt
 node app.js
 ```
 
-Open http://localhost:8080/ in browser.
+Open http://localhost:8080/ in browser. Or you may apply some environmental variables:
+
+```
+PORT=8081 BINARY=/my/path/to/pdflatex node app.js
+```
 
 ## Config:
 You may adjust some settings in the config.js

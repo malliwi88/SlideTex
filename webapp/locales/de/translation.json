@@ -33,6 +33,14 @@
             "upload": "Grafik hochladen",
             "choose": "Grafik auswählen",
             "abort": "Abbrechen"
+        },
+        "info": {
+            "headline": "Info",
+            "projectDescription": "Dies ist eine Anwendung um mit LaTeX Präsentationen zu erstellen. SlideTex wurde im Rahmen einer Masterarbeit an der University of Applied Sciences Kufstein entwickelt. Ziel war es mit einem Usability-Engineering Vorgehen eine LaTeX Anwendung ins Web zu bringen.",
+            "disclaimerHeadline": "Disclaimer",
+            "disclaimer": "Diese Anwendung dient ausschließlich der Forschung. Die Anwendung kann Fehler enthalten und unsicher sein. Als Betreiber und Entwickler distanziere ich mich ausdrücklich von den Inhalten die Dritte in dieser Anwendung publizieren. Verantwortlich für die Inhalte sind die Nutzer. Verantwortlich für Anwendung ist der Betreiber. Inhalte sind nicht Teil der Anwendung.",
+            "contactHeadline": "Kontakt",
+            "abort": "Abbrechen"
         }
     },
     "errorlog": "Fehlerausgabe:"

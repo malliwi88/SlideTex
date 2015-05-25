@@ -33,6 +33,14 @@
             "upload": "Upload graphic",
             "choose": "Choose graphic",
             "abort": "Abort"
+        },
+        "info": {
+            "headline": "Info",
+            "projectDescription": "This is an application for creating presentations with LaTeX. SlideTex was developed within a master thesis at University of Applied Sciences Kufstein. The goal was to build a LaTeX application for the web with a usability engineering process.",
+            "disclaimerHeadline": "Disclaimer",
+            "disclaimer": "This application was made for sciences. This application has probably errors and can be unsave. As distributor and developer I explicitly distance myself from the contents which are made by the users. The users are responsible for the contents. The distributor and developer is only responsible for the application. Contents are not part of the application.",
+            "contactHeadline": "Contakt",
+            "abort": "Abort"
         }
     },
     "errorlog": "Error log:"
