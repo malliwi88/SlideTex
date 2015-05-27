@@ -38,12 +38,29 @@ module.exports = function(grunt) {
                     interrupt: true
                 }
             }
+        },
+        copy: {
+            // creates a runnable build with a smaller footprint
+            deployBuild: {
+                expand: true,
+                cwd: './',
+                src: [
+                    '**',
+                    '!.sass-cache/**',
+                    '!tmp/**',
+                    '!webapp/libs/ace-builds/**',
+                    'webapp/libs/ace-builds/src-min-noconflict/**',
+                    '!node_modules/grunt*/**'
+                ],
+                dest: 'tmp/SlideTex'
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-compass');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-copy');
 
     // Default task(s).
     grunt.registerTask('buildWebapp', ['compass', 'concat']);

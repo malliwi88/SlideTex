@@ -1,0 +1,78 @@
+#!/bin/bash
+#
+# An init.d script for running a Node.js process as a service using Forever as
+# the process monitor. For more configuration options associated with Forever,
+# see: https://github.com/nodejitsu/forever
+#
+# This was written for Debian distributions such as Ubuntu, but should still
+# work on RedHat, Fedora, or other RPM-based distributions, since none of the
+# built-in service functions are used. So information is provided for both.
+
+# The server will run under this user
+USER="wittem"
+# Unique application name
+NAME="slidetex"
+
+# Path to the application
+APPLICATION_PATH="/var/www/slidetex.net/SlideTex"
+# Application file which gets started
+APPLICATION_FILE="app.js"
+# Path to the pdflatex binary
+PDFLATEXBINARY="/usr/bin/pdflatex"
+
+# Path to the logfile for the console output, user needs write rights here!
+LOGFILE="/var/www/slidetex.net/logs/console.log"
+
+MIN_UPTIME="5000"
+SPIN_SLEEP_TIME="2000"
+
+# Paths to node
+NODE_BIN_DIR="/usr/local/node/bin"
+NODE_PATH="/usr/local/lib/node_modules"
+ 
+# Add node to the path for situations in which the environment is passed.
+PATH=$NODE_BIN_DIR:$PATH
+# Export all environment variables that must be visible for the Node.js
+# application process forked by Forever. It will not see any of the other
+# variables defined in this script.
+export NODE_PATH=$NODE_PATH
+
+export BINARY=$PDFLATEXBINARY
+ 
+start() {
+    echo "Starting $NAME"
+
+    su $USER -c "forever -a -l $LOGFILE --minUptime $MIN_UPTIME --spinSleepTime $SPIN_SLEEP_TIME --sourceDir $APPLICATION_PATH --uid $NAME start $APPLICATION_FILE 2>&1 > /dev/null &"
+
+    echo "$NAME running with user $USER in $APPLICATION_PATH with with $APPLICATION_FILE"
+
+    RETVAL=$?
+}
+ 
+stop() {
+    echo "Shutting down $NAME"
+    su $USER -c "forever stop $NAME 2>&1 > /dev/null"
+    RETVAL=$?
+}
+ 
+restart() {
+    stop
+    start
+}
+ 
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        restart
+        ;;
+    *)
+        echo "Usage: {start|stop|restart}"
+        exit 1
+        ;;
+esac
+exit $RETVAL

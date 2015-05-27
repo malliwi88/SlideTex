@@ -1,4 +1,4 @@
-var config = require('./config');
+var config = require('./modules/config');
 
 var connect = require('connect');
 var bodyParser = require('body-parser');
@@ -8,11 +8,11 @@ var app = express();
 var multer  = require('multer');
 var exec = require('child_process').exec;
 var mkdirp = require('mkdirp');
-var sanitizer = require("./sanitizer.js");
 var mime = require('mime');
 
-var currentState = require('./currentState.js');
-var compile = require('./compile.js');
+var sanitizer = require("./modules/sanitizer.js");
+var currentState = require('./modules/currentState.js');
+var compile = require('./modules/compile.js');
 
 /**
  * Upload handling of files
