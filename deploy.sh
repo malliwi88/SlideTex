@@ -5,9 +5,10 @@ HOST='slidetex.net'
 USER='root'
 SERVER_DIR='/var/www/slidetex.net'
 
-RED=' --------------------------------\n\033[0;31m'
-NC='\033[0m\n --------------------------------\n' # No Color
-printf "${RED}Create a build for deploying${NC}"
+SEP_PRE='\033[0;32m --------------------------------\n'
+SEP_PRE_ERROR='\033[0;31m --------------------------------\n'
+SEP_POST='\n --------------------------------\033[0m\n' # No Color
+printf "${SEP_PRE}Create a build for deploying${SEP_POST}"
 
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
 
@@ -29,7 +30,7 @@ echo Clean up tmp dir
 rm -rf tmp
 
 
-printf "${RED}Deploying on ${HOST} STARTING${NC}"
+printf "${SEP_PRE}Deploying on ${HOST} STARTING${SEP_POST}"
 
 ssh -t -t ${USER}@${HOST} <<ENDSSH
 
@@ -56,7 +57,7 @@ mv /tmp/slidetex/SlideTex ./SlideTex_New
 rm -rf /tmp/slidetex
 
 echo Insert new output defaults into persistence
-cp -p $(find SlideTex_New/webapp/output -name '*.pdf' -o -name '*.tex') Persistence/
+cp -r SlideTex_New/webapp/output/* Persistence/
 
 echo Replace old output folder with existing Persistence with symlink
 rm -rf SlideTex_New/webapp/output
@@ -73,4 +74,19 @@ service slidetex start
 exit
 ENDSSH
 
-printf "${RED}Deploying on ${HOST} DONE${NC}"
+
+printf "Testing system state.."
+sleep 1
+printf "."
+sleep 1
+printf ".\n"
+
+RESPONSE=$(curl --write-out %{http_code} --silent --output /dev/null $HOST)
+
+if [ "$RESPONSE" = "200" ]
+  then
+    printf "${SEP_PRE}Deploying on ${HOST} SUCCESSFUL DONE: $RESPONSE${SEP_POST}"
+  else
+    printf "${SEP_PRE_ERROR}Deploying on ${HOST} FAILED: $RESPONSE${SEP_POST}"
+    exit 1
+fi
