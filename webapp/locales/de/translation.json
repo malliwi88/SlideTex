@@ -40,7 +40,8 @@
             "disclaimerHeadline": "Disclaimer",
             "disclaimer": "Diese Anwendung dient ausschließlich der Forschung. Die Anwendung kann Fehler enthalten und unsicher sein. Als Betreiber und Entwickler distanziere ich mich ausdrücklich von den Inhalten die Dritte in dieser Anwendung publizieren. Verantwortlich für die Inhalte sind die Nutzer. Verantwortlich für Anwendung ist der Betreiber. Inhalte sind nicht Teil der Anwendung.",
             "contactHeadline": "Kontakt",
-            "abort": "Abbrechen"
+            "abort": "Abbrechen",
+            "tracking": "Diese Anwendung wird durch Google Analytics und PTengine analysiert. Dies dient der weiteren Verbesserung der Anwendung."
         }
     },
     "errorlog": "Fehlerausgabe:"

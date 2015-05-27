@@ -39,6 +39,7 @@ $(function() {
 
             // initializes the components
             $( document ).ready(function() {
+                SlideTex.Tracking.init();
                 SlideTex.Writer.init();
                 SlideTex.Layout.init();
                 SlideTex.Viewer.init(data.pdf);

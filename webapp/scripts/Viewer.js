@@ -48,6 +48,9 @@ $(function() {
 
         // if latex compiling failed
         if(data.error) {
+
+            SlideTex.Tracking.event('compile', 'error', SlideTex.id);
+
             $viewContainer.addClass('error-present');
             // add error log and scroll down to last line
             $errorLog.html(escapeHtml(data.console));
@@ -80,6 +83,7 @@ $(function() {
 
     function attachEventListeners() {
         $compileSlides.click(function() {
+            SlideTex.Tracking.event('compile', 'compiling', 'button');
             compile();
         });
 
@@ -87,6 +91,9 @@ $(function() {
         $compileSlidesAuto.click(function() {
             if($(this).prop('checked')) {
                 compile();
+                SlideTex.Tracking.event('compile', 'auto', 'enabled');
+            }else{
+                SlideTex.Tracking.event('compile', 'auto', 'disabled');
             }
         });
 
@@ -94,6 +101,7 @@ $(function() {
         $(SlideTex.Writer.editorDomSelector).keyup(function() {
             delay(function(){
                 if($compileSlidesAuto.prop('checked')) {
+                    SlideTex.Tracking.event('compile', 'compiling', 'auto');
                     compile();
                 }
             }, 2500 );
@@ -106,6 +114,7 @@ $(function() {
                     // Save Function
                     event.preventDefault();
 
+                    SlideTex.Tracking.event('compile', 'compiling', 'shortcut');
                     compile();
                     return false;
                 };

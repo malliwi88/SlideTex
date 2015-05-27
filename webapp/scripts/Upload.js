@@ -24,12 +24,19 @@ $(function() {
         $imagesContainer.append(imageThumbDom);
         $imagesList.slideDown();
         imageThumbDom.click(function() {
+            SlideTex.Tracking.event('graphic', 'used', fileName);
             SlideTex.Writer.editor.insert(getImageFigureCode(fileName));
         });
     }
 
     function showImage(fileName, webPathName) {
+
+        SlideTex.Tracking.event('graphic', 'uploaded', fileName);
+
         addImage(fileName, webPathName);
+
+        SlideTex.Tracking.event('graphic', 'used', fileName);
+
         SlideTex.Writer.editor.insert(getImageFigureCode(fileName));
         $imagesModal.modal('hide');
     }
@@ -75,6 +82,14 @@ $(function() {
                     addImage(image.name, image.webPathName);
                 }
             }
+
+            $imagesModal.on('show.bs.modal', function(e){
+                SlideTex.Tracking.event('graphic', 'openModal');
+            });
+
+            $imagesModal.on('hide.bs.modal', function(e){
+                SlideTex.Tracking.event('graphic', 'closeModal');
+            });
         }
     };
 });

@@ -40,7 +40,8 @@
             "disclaimerHeadline": "Disclaimer",
             "disclaimer": "This application was made for sciences. This application has probably errors and can be unsave. As distributor and developer I explicitly distance myself from the contents which are made by the users. The users are responsible for the contents. The distributor and developer is only responsible for the application. Contents are not part of the application.",
             "contactHeadline": "Contakt",
-            "abort": "Abort"
+            "abort": "Abort",
+            "tracking": "This applicaiton gets tracked with Google Analytics and PTengine. This is for improving the usability."
         }
     },
     "errorlog": "Error log:"

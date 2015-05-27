@@ -40,6 +40,8 @@ $(function() {
 
         $addSlide.click(function addSlideEvent() {
 
+            SlideTex.Tracking.event('toolbar', 'newSlide');
+
             var code = aceEditor.getSession().getValue();
 
             var withoutEnd = code.substr(0, code.indexOf('\\end{document}'));
@@ -61,6 +63,9 @@ $(function() {
         });
 
         $itemize.click(function itemize() {
+
+            SlideTex.Tracking.event('toolbar', 'addItemize');
+
             var itemize = "\\begin{itemize}\n " +
                           "    \\item \n"+
                           "\\end{itemize}";
@@ -68,6 +73,9 @@ $(function() {
         });
 
         $enumerate.click(function enumerate() {
+
+            SlideTex.Tracking.event('toolbar', 'addEnumerate');
+
             var enumerate = "\\begin{enumerate}\n " +
                 "    \\item \n"+
                 "\\end{enumerate}";
@@ -75,10 +83,16 @@ $(function() {
         });
 
         $undo.click(function undoEvent() {
+
+            SlideTex.Tracking.event('toolbar', 'undo');
+
             aceEditor.getSession().getUndoManager().undo();
         });
 
         $redo.click(function redoEvent() {
+
+            SlideTex.Tracking.event('toolbar', 'redo');
+
             aceEditor.getSession().getUndoManager().redo();
         });
 

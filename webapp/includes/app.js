@@ -41,6 +41,7 @@ $(function() {
 
             // initializes the components
             $( document ).ready(function() {
+                SlideTex.Tracking.init();
                 SlideTex.Writer.init();
                 SlideTex.Layout.init();
                 SlideTex.Viewer.init(data.pdf);
@@ -66,6 +67,8 @@ $(function() {
             setTimeout(function() {
                 resizeVertical();
             }, 100);
+
+            SlideTex.Tracking.event('notification', 'close', 'Bookmark');
         });
 
         if(localStorage.bookmark) {
@@ -99,6 +102,65 @@ $(function() {
 });;
 $(function() {
 
+    function gaEvent(cat, action, label, value) {
+
+        if(!cat || !action) {
+            var msg = "Needed parameters for a ga event are not given!";
+            if(typeof console.error != 'undefined'){
+                console.error(msg);
+            }else if(typeof console.log != 'undefined') {
+                console.log(msg);
+            }
+            return;
+        }
+
+        var event = {
+            'hitType': 'event',
+            'eventCategory': cat,
+            'eventAction': action
+        };
+
+        if(label) {
+            event.eventLabel = label;
+        }
+
+        if(value) {
+            event.eventValue = value;
+        }
+
+
+        if(document.location.hostname === 'slidetex.net') {
+            ga('send', event);
+        }else{
+            console.log(event);
+        }
+    }
+
+    function applyEventListeners() {
+        var $infoModal = $("#infoModal");
+        $infoModal.on('show.bs.modal', function(e){
+            SlideTex.Tracking.event('info', 'openModal');
+        });
+
+        $infoModal.on('hide.bs.modal', function(e){
+            SlideTex.Tracking.event('info', 'closeModal');
+        });
+    }
+
+
+    if(typeof window.SlideTex == 'undefined') {
+        window.SlideTex = {};
+    }
+
+    SlideTex.Tracking = {
+        init: function(images) {
+            applyEventListeners();
+        },
+        event: gaEvent
+    };
+});;
+$(function() {
+
     // Variable to store your files
     var files;
 
@@ -122,12 +184,19 @@ $(function() {
         $imagesContainer.append(imageThumbDom);
         $imagesList.slideDown();
         imageThumbDom.click(function() {
+            SlideTex.Tracking.event('graphic', 'used', fileName);
             SlideTex.Writer.editor.insert(getImageFigureCode(fileName));
         });
     }
 
     function showImage(fileName, webPathName) {
+
+        SlideTex.Tracking.event('graphic', 'uploaded', fileName);
+
         addImage(fileName, webPathName);
+
+        SlideTex.Tracking.event('graphic', 'used', fileName);
+
         SlideTex.Writer.editor.insert(getImageFigureCode(fileName));
         $imagesModal.modal('hide');
     }
@@ -173,6 +242,14 @@ $(function() {
                     addImage(image.name, image.webPathName);
                 }
             }
+
+            $imagesModal.on('show.bs.modal', function(e){
+                SlideTex.Tracking.event('graphic', 'openModal');
+            });
+
+            $imagesModal.on('hide.bs.modal', function(e){
+                SlideTex.Tracking.event('graphic', 'closeModal');
+            });
         }
     };
 });;
@@ -225,6 +302,9 @@ $(function() {
 
         // if latex compiling failed
         if(data.error) {
+
+            SlideTex.Tracking.event('compile', 'error', SlideTex.id);
+
             $viewContainer.addClass('error-present');
             // add error log and scroll down to last line
             $errorLog.html(escapeHtml(data.console));
@@ -257,6 +337,7 @@ $(function() {
 
     function attachEventListeners() {
         $compileSlides.click(function() {
+            SlideTex.Tracking.event('compile', 'compiling', 'button');
             compile();
         });
 
@@ -264,6 +345,9 @@ $(function() {
         $compileSlidesAuto.click(function() {
             if($(this).prop('checked')) {
                 compile();
+                SlideTex.Tracking.event('compile', 'auto', 'enabled');
+            }else{
+                SlideTex.Tracking.event('compile', 'auto', 'disabled');
             }
         });
 
@@ -271,6 +355,7 @@ $(function() {
         $(SlideTex.Writer.editorDomSelector).keyup(function() {
             delay(function(){
                 if($compileSlidesAuto.prop('checked')) {
+                    SlideTex.Tracking.event('compile', 'compiling', 'auto');
                     compile();
                 }
             }, 2500 );
@@ -283,6 +368,7 @@ $(function() {
                     // Save Function
                     event.preventDefault();
 
+                    SlideTex.Tracking.event('compile', 'compiling', 'shortcut');
                     compile();
                     return false;
                 };
@@ -361,6 +447,8 @@ $(function() {
 
         $addSlide.click(function addSlideEvent() {
 
+            SlideTex.Tracking.event('toolbar', 'newSlide');
+
             var code = aceEditor.getSession().getValue();
 
             var withoutEnd = code.substr(0, code.indexOf('\\end{document}'));
@@ -382,6 +470,9 @@ $(function() {
         });
 
         $itemize.click(function itemize() {
+
+            SlideTex.Tracking.event('toolbar', 'addItemize');
+
             var itemize = "\\begin{itemize}\n " +
                           "    \\item \n"+
                           "\\end{itemize}";
@@ -389,6 +480,9 @@ $(function() {
         });
 
         $enumerate.click(function enumerate() {
+
+            SlideTex.Tracking.event('toolbar', 'addEnumerate');
+
             var enumerate = "\\begin{enumerate}\n " +
                 "    \\item \n"+
                 "\\end{enumerate}";
@@ -396,10 +490,16 @@ $(function() {
         });
 
         $undo.click(function undoEvent() {
+
+            SlideTex.Tracking.event('toolbar', 'undo');
+
             aceEditor.getSession().getUndoManager().undo();
         });
 
         $redo.click(function redoEvent() {
+
+            SlideTex.Tracking.event('toolbar', 'redo');
+
             aceEditor.getSession().getUndoManager().redo();
         });
 

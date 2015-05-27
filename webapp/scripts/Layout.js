@@ -15,6 +15,8 @@ $(function() {
             setTimeout(function() {
                 resizeVertical();
             }, 100);
+
+            SlideTex.Tracking.event('notification', 'close', 'Bookmark');
         });
 
         if(localStorage.bookmark) {
