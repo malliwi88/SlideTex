@@ -6,7 +6,8 @@ The development of this application was made with a usability engineering proces
 There will be a publication in the next moths which describes entire development.
 
 ## Demo
-Coming soon
+[slidetex.net](http://slidetex.net)
+
 ## Dependencies
 ### Running
 - [node.js](http://nodejs.org/)
@@ -37,7 +38,7 @@ PORT=8081 BINARY=/my/path/to/pdflatex node app.js
 ```
 
 ## Config:
-You may adjust some settings in the config.js
+You may adjust some settings in the modules/config.js
 
 ## Author and License
 SlideTex was made by [Matthias Witte](http://matthias-witte.net/).
