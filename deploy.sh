@@ -68,6 +68,7 @@ service slidetex stop
 echo Replace old source with new one
 mv SlideTex old_instances/$TIMESTAMP
 mv SlideTex_New SlideTex
+chown -R wittem:wittem SlideTex
 
 service slidetex start
 
