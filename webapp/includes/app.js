@@ -53,6 +53,9 @@ $(function() {
 
     var $contentContainer = $('.content-container');
     var $bookmarkBox = $('.ui-bookmark');
+    var $resize = $('.ui-resize');
+    var $editContainer = $('.editor-container');
+    var $viewContainer = $('.view-container');
 
     function resizeVertical() {
         $contentContainer.height($(window).height() - $contentContainer.offset().top - 4);
@@ -94,6 +97,20 @@ $(function() {
                 $('.ui-tooltip').tooltip();
             });
 
+            var normalWidhtClass = 'col-sm-6';
+            var resizedSmallClass = 'col-sm-2';
+            var resizedBroadClass = 'col-sm-10';
+
+            $resize.click(function resize() {
+                if($editContainer.hasClass(normalWidhtClass)) {
+                    $viewContainer.addClass(resizedBroadClass).removeClass(normalWidhtClass);
+                    $editContainer.addClass(resizedSmallClass).removeClass(normalWidhtClass);
+                }else{
+                    $viewContainer.addClass(normalWidhtClass).removeClass(resizedBroadClass);
+                    $editContainer.addClass(normalWidhtClass).removeClass(resizedSmallClass);
+                }
+            });
+
         }
     };
 });;
@@ -115,6 +132,20 @@ $(function() {
             '\\end{figure}\n' ;
     }
 
+    function addImageFigureCode(fileName) {
+        var currentPos = SlideTex.Writer.editor.getCursorPosition();
+
+        SlideTex.Writer.editor.insert(getImageFigureCode(fileName));
+
+        currentPos.row = currentPos.row + 2;
+        currentPos.column = 46;
+        SlideTex.Writer.editor.moveCursorToPosition(currentPos);
+        setTimeout(function() {
+            SlideTex.Writer.editor.focus();
+        }, 500);
+
+    }
+
     function addImage(fileName, webPathName) {
         var imageThumbDom = $('<div class="col-sm-6 col-md-4"> <div class="thumbnail"><img src="'+webPathName+'" data-dismiss="modal"><div class="caption">' +
             '<p>'+fileName+'</p></div></div></div>');
@@ -122,13 +153,13 @@ $(function() {
         $imagesContainer.append(imageThumbDom);
         $imagesList.slideDown();
         imageThumbDom.click(function() {
-            SlideTex.Writer.editor.insert(getImageFigureCode(fileName));
+            addImageFigureCode(fileName);
         });
     }
 
     function showImage(fileName, webPathName) {
         addImage(fileName, webPathName);
-        SlideTex.Writer.editor.insert(getImageFigureCode(fileName));
+        addImageFigureCode(fileName);
         $imagesModal.modal('hide');
     }
 
@@ -331,27 +362,6 @@ $(function() {
 
     var aceEditor;
 
-
-    function insertDefaultTemplate() {
-        var example = "\\documentclass{beamer} "
-            + "\n\\begin{document} "
-            + "\n\\title{Simple Beamer Class}    "
-            + "\n\\author{Sascha Frank}  "
-            + "\n\\date{\\today}  "
-            + "\n "
-            + "\n\\frame{\\titlepage}  "
-            + "\n "
-            + "\n "
-            + "\n\\frame{\\frametitle{Title}  "
-            + "\nEach frame should have a title. "
-            + "\n} "
-            + "\n "
-            + "\n "
-            + "\n\\end{document} ";
-
-        $editor.append(example);
-    }
-
     function calculateAmountOfFrames() {
         return (aceEditor.getSession().getValue().match(/\\frame{/g) || []).length;
     }
@@ -367,12 +377,13 @@ $(function() {
 
             var linesWithoutEnd = withoutEnd.split(/\r*\n/);
 
-            aceEditor.getSession().insert({row:linesWithoutEnd.length - 1, column: 0}, frameSkeleton);
+            var pos = {row: linesWithoutEnd.length - 1, column: 0};
 
+            aceEditor.getSession().insert(pos, frameSkeleton);
 
-            //code = code.insertAt(code.indexOf('\\end{document}'),frameSkeleton);
-
-            //aceEditor.getSession().setValue(code);
+            pos.column = 29
+            aceEditor.moveCursorToPosition(pos);
+            aceEditor.focus();
 
             // update current Page
             localStorage.currentPage = calculateAmountOfFrames();
@@ -382,17 +393,31 @@ $(function() {
         });
 
         $itemize.click(function itemize() {
+            var currentPos = aceEditor.getCursorPosition();
+
             var itemize = "\\begin{itemize}\n " +
                           "    \\item \n"+
                           "\\end{itemize}";
             aceEditor.insert(itemize);
+
+            currentPos.row = currentPos.row + 1;
+            currentPos.column = 11;
+            aceEditor.moveCursorToPosition(currentPos);
+            aceEditor.focus();
         });
 
         $enumerate.click(function enumerate() {
+            var currentPos = aceEditor.getCursorPosition();
+
             var enumerate = "\\begin{enumerate}\n " +
                 "    \\item \n"+
                 "\\end{enumerate}";
             aceEditor.insert(enumerate);
+
+            currentPos.row = currentPos.row + 1;
+            currentPos.column = 11;
+            aceEditor.moveCursorToPosition(currentPos);
+            aceEditor.focus();
         });
 
         $undo.click(function undoEvent() {
@@ -445,7 +470,6 @@ $(function() {
 
             initeditor();
             attachEventListeners();
-            //insertDefaultTemplate();
             SlideTex.Writer.editor = aceEditor;
 
         },

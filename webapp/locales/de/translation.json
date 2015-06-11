@@ -20,6 +20,10 @@
             "tooltip": "Nummerierte Liste einfügen",
             "label": ""
         },
+        "resize": {
+            "tooltip": "Vergrößert den Ausgabebereich",
+            "label": ""
+        },
         "newSlide": "Neue Folie ( \\frame{..} )",
         "compileSlides": "Folien aktualisieren",
         "compileSlidesAuto": "automatisch"

@@ -10,27 +10,6 @@ $(function() {
 
     var aceEditor;
 
-
-    function insertDefaultTemplate() {
-        var example = "\\documentclass{beamer} "
-            + "\n\\begin{document} "
-            + "\n\\title{Simple Beamer Class}    "
-            + "\n\\author{Sascha Frank}  "
-            + "\n\\date{\\today}  "
-            + "\n "
-            + "\n\\frame{\\titlepage}  "
-            + "\n "
-            + "\n "
-            + "\n\\frame{\\frametitle{Title}  "
-            + "\nEach frame should have a title. "
-            + "\n} "
-            + "\n "
-            + "\n "
-            + "\n\\end{document} ";
-
-        $editor.append(example);
-    }
-
     function calculateAmountOfFrames() {
         return (aceEditor.getSession().getValue().match(/\\frame{/g) || []).length;
     }
@@ -46,12 +25,13 @@ $(function() {
 
             var linesWithoutEnd = withoutEnd.split(/\r*\n/);
 
-            aceEditor.getSession().insert({row:linesWithoutEnd.length - 1, column: 0}, frameSkeleton);
+            var pos = {row: linesWithoutEnd.length - 1, column: 0};
 
+            aceEditor.getSession().insert(pos, frameSkeleton);
 
-            //code = code.insertAt(code.indexOf('\\end{document}'),frameSkeleton);
-
-            //aceEditor.getSession().setValue(code);
+            pos.column = 29
+            aceEditor.moveCursorToPosition(pos);
+            aceEditor.focus();
 
             // update current Page
             localStorage.currentPage = calculateAmountOfFrames();
@@ -61,17 +41,31 @@ $(function() {
         });
 
         $itemize.click(function itemize() {
+            var currentPos = aceEditor.getCursorPosition();
+
             var itemize = "\\begin{itemize}\n " +
                           "    \\item \n"+
                           "\\end{itemize}";
             aceEditor.insert(itemize);
+
+            currentPos.row = currentPos.row + 1;
+            currentPos.column = 11;
+            aceEditor.moveCursorToPosition(currentPos);
+            aceEditor.focus();
         });
 
         $enumerate.click(function enumerate() {
+            var currentPos = aceEditor.getCursorPosition();
+
             var enumerate = "\\begin{enumerate}\n " +
                 "    \\item \n"+
                 "\\end{enumerate}";
             aceEditor.insert(enumerate);
+
+            currentPos.row = currentPos.row + 1;
+            currentPos.column = 11;
+            aceEditor.moveCursorToPosition(currentPos);
+            aceEditor.focus();
         });
 
         $undo.click(function undoEvent() {
@@ -124,7 +118,6 @@ $(function() {
 
             initeditor();
             attachEventListeners();
-            //insertDefaultTemplate();
             SlideTex.Writer.editor = aceEditor;
 
         },

@@ -1,6 +1,12 @@
 // adjustments for the pdf viewer
 
 // hide some options
-#openFile,#secondaryOpenFile,#viewBookmark,#secondaryViewBookmark,#print,#secondaryPrint {
+#openFile,#secondaryOpenFile,#viewBookmark,#secondaryViewBookmark,#print,#secondaryPrint,#secondaryToolbarToggle {
 	display: none !important;
+}
+
+#outerContainer {
+	#download,#presentationMode {
+		display: inherit !important;
+	}
 }

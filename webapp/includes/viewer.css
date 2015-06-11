@@ -1,4 +1,9 @@
 /* line 4, ../sass/viewer.scss */
-#openFile, #secondaryOpenFile, #viewBookmark, #secondaryViewBookmark, #print, #secondaryPrint {
+#openFile, #secondaryOpenFile, #viewBookmark, #secondaryViewBookmark, #print, #secondaryPrint, #secondaryToolbarToggle {
   display: none !important;
+}
+
+/* line 9, ../sass/viewer.scss */
+#outerContainer #download, #outerContainer #presentationMode {
+  display: inherit !important;
 }

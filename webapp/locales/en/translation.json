@@ -20,6 +20,10 @@
             "tooltip": "Add sorted list",
             "label": ""
         },
+        "resize": {
+            "tooltip": "Increases the output's size",
+            "label": ""
+        },
         "newSlide": "New slide ( \\frame{..} )",
         "compileSlides": "Compile slides",
         "compileSlidesAuto": "automatic"

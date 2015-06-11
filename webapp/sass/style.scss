@@ -23,6 +23,8 @@ $fa-font-path:        "../libs/fontawesome/fonts";
 
 		.editor-container {
 			height: 100%;
+			-webkit-transition: width 0.3s;
+
 
 			#editor {
 				position: absolute;
@@ -43,6 +45,7 @@ $fa-font-path:        "../libs/fontawesome/fonts";
 		}
 		.view-container {
 			height: 100%;
+			-webkit-transition: width 0.3s;
 			.frame {
 				width: 100%;
 				height: 100%;

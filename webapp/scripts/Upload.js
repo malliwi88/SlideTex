@@ -17,6 +17,20 @@ $(function() {
             '\\end{figure}\n' ;
     }
 
+    function addImageFigureCode(fileName) {
+        var currentPos = SlideTex.Writer.editor.getCursorPosition();
+
+        SlideTex.Writer.editor.insert(getImageFigureCode(fileName));
+
+        currentPos.row = currentPos.row + 2;
+        currentPos.column = 46;
+        SlideTex.Writer.editor.moveCursorToPosition(currentPos);
+        setTimeout(function() {
+            SlideTex.Writer.editor.focus();
+        }, 500);
+
+    }
+
     function addImage(fileName, webPathName) {
         var imageThumbDom = $('<div class="col-sm-6 col-md-4"> <div class="thumbnail"><img src="'+webPathName+'" data-dismiss="modal"><div class="caption">' +
             '<p>'+fileName+'</p></div></div></div>');
@@ -24,13 +38,13 @@ $(function() {
         $imagesContainer.append(imageThumbDom);
         $imagesList.slideDown();
         imageThumbDom.click(function() {
-            SlideTex.Writer.editor.insert(getImageFigureCode(fileName));
+            addImageFigureCode(fileName);
         });
     }
 
     function showImage(fileName, webPathName) {
         addImage(fileName, webPathName);
-        SlideTex.Writer.editor.insert(getImageFigureCode(fileName));
+        addImageFigureCode(fileName);
         $imagesModal.modal('hide');
     }
 
